@@ -328,9 +328,9 @@ bot.on('message', (msg) => {
     } else if (userState.step === 0 && message === "Статистика \u{1F4C9}" && (chatId === 826855928 || chatId === 1025042420)) {
         let allUsers;
         let activeOrders;
-        let allOrders;
-        let allСarrierOrders;
-        let allCustomerOrders;
+        let allOrders = 0;
+        let allСarrierOrders = 0;
+        let allCustomerOrders = 0;
         db.all('SELECT * FROM users', (err, users) => {
             if (err) {
                 console.error(err);
@@ -340,9 +340,9 @@ bot.on('message', (msg) => {
             if (users.length > 0) {
                 allUsers = users.length;
                 users.forEach((user) => {
-                    allOrders =+ user.valueOrders;
-                    allСarrierOrders =+ user.carrierOrders;
-                    allCustomerOrders =+ user.customerOrders;
+                    allOrders += user.valueOrders;
+                    allСarrierOrders += user.carrierOrders;
+                    allCustomerOrders += user.customerOrders;
                 })
                 db.all('SELECT * FROM orders', (err, orders) => {
                     if (err) {
