@@ -254,7 +254,7 @@ bot.on('message', (msg) => {
                 0
             }
             if (users.length > 0) {
-                bot.sendMessage(chatId, `Ваш ID пользователя: ${chatId}\nСформировано заказов за все время: ${users[0].valueOrders}\n из них:\n -в роли "Перевозчик": ${users[0].carrierOrders}\n -в роли "Перевозчик": ${users[0].customerOrders}`)
+                bot.sendMessage(chatId, `Ваш ID пользователя: ${chatId}\nСформировано заказов за все время: ${users[0].valueOrders}\n из них:\n -в роли "Перевозчик": ${users[0].carrierOrders}\n -в роли "Заказчик": ${users[0].customerOrders}`)
             }
         })
     }
@@ -331,27 +331,27 @@ bot.on('message', (msg) => {
         let allOrders;
         let allСarrierOrders;
         let allCustomerOrders;
-        db.all('SELECT * FROM users', (err, rows) => {
+        db.all('SELECT * FROM users', (err, users) => {
             if (err) {
                 console.error(err);
                 bot.sendMessage(chatId, 'Произошла ошибка при получении данных пользователя');
                 return;
             }
-            if (rows.length > 0) {
-                allUsers = rows.length;
-                rows.forEach((user) => {
-                    allOrders = +user.valueOrders;
-                    allСarrierOrders = +user.carrierOrders;
-                    allCustomerOrders = +user.customerOrders;
+            if (users.length > 0) {
+                allUsers = users.length;
+                users.forEach((user) => {
+                    allOrders =+ user.valueOrders;
+                    allСarrierOrders =+ user.carrierOrders;
+                    allCustomerOrders =+ user.customerOrders;
                 })
-                db.all('SELECT * FROM orders', (err, rows) => {
+                db.all('SELECT * FROM orders', (err, orders) => {
                     if (err) {
                         console.error(err);
                         bot.sendMessage(chatId, 'Произошла ошибка при получении активных заказов');
                         return;
                     }
-                    if (rows.length > 0) {
-                        activeOrders = rows.length;
+                    if (orders.length > 0) {
+                        activeOrders = orders.length;
                         bot.sendMessage(chatId, `Всего пользователей: ${allUsers}\nВсего активных заказов: ${activeOrders}\nЗаказов за все время: ${allOrders}\n из них:\n -заказов в роли "Перевозчик": ${allСarrierOrders}\n -заказов в роли "Заказчика": ${allCustomerOrders}`);
                     } else {
                         bot.sendMessage(chatId, `Всего пользователей: ${allUsers}\nВсего активных заказов: 0\nЗаказов за все время: ${allOrders}\n из них:\n -заказов в роли "Перевозчик": ${allСarrierOrders}\n -заказов в роли "Заказчика": ${allCustomerOrders}`);
